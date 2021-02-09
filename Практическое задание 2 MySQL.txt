@@ -1,0 +1,240 @@
+1. Установите СУБД MySQL. Создайте в домашней директории файл .my.cnf, задав в нем логин и пароль, который указывался при установке.
+#Вход в mysql без файла 
+simon@simon-VirtualBox:~$ mysql
+ERROR 1045 (28000): Access denied for user 'simon'@'localhost' (using password: NO)
+
+#Создание файла .my.cnf в dbeaver
+[mysql]
+user=root
+password=password
+
+#Проверка наличии файла в домашней директории
+simon@simon-VirtualBox:~$ ls -la
+итого 120
+drwxr-xr-x 19 simon simon 4096 фев  9 15:35  .
+drwxr-xr-x  3 root  root  4096 фев  8 17:37  ..
+-rw-------  1 simon simon 1229 фев  9 15:30  .bash_history
+-rw-r--r--  1 simon simon  220 фев  8 17:37  .bash_logout
+-rw-r--r--  1 simon simon 3771 фев  8 17:37  .bashrc
+drwx------ 13 simon simon 4096 фев  8 18:28  .cache
+drwxr-xr-x 11 simon simon 4096 фев  8 19:07  .config
+drwxrwxr-x  4 simon simon 4096 фев  8 18:47  .eclipse
+drwx------  3 simon simon 4096 фев  8 18:46  .gnupg
+-rw-rw-r--  1 simon simon   20 фев  8 18:56  Helo.sql
+drwxr-xr-x  3 simon simon 4096 фев  8 17:43  .local
+drwx------  5 simon simon 4096 фев  8 18:15  .mozilla
+-rw-rw-r--  1 simon simon   39 фев  9 15:35  .my.cnf
+-rw-------  1 simon simon   42 фев  8 19:06  .mysql_history
+-rw-r--r--  1 simon simon  807 фев  8 17:37  .profile
+drwxr-xr-x  3 simon simon 4096 фев  8 18:19  snap
+drwx------  2 simon simon 4096 фев  8 18:46  .ssh
+simon@simon-VirtualBox:~$ cat ~/.my.cnf
+[mysql]
+user=root
+password=passwordsimon@simon-VirtualBox:~$ 
+
+#Вход без пароля
+
+password=passwordsimon@simon-VirtualBox:~$ mysql
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 9
+Server version: 8.0.23-0ubuntu0.20.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2021, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> 
+
+2.Создайте базу данных example, разместите в ней таблицу users, состоящую из двух столбцов, числового id и строкового name.
+
+#Создание базы данных example
+mysql> CREATE DATABASE example
+    -> ;
+Query OK, 1 row affected (0.00 sec)
+
+#Проверка списка баз данных
+mysql> show databases
+    -> ;
++--------------------+
+| Database           |
++--------------------+
+| example            |
+| information_schema |
+| mysql              |
+| performance_schema |
+| shop               |
+| sys                |
++--------------------+
+6 rows in set (0.00 sec)
+
+#Заходим в БД example
+
+simon@simon-VirtualBox:~$ mysql example
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 13
+Server version: 8.0.23-0ubuntu0.20.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2021, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> SHOW TABLES
+    -> ;
+Empty set (0.00 sec)
+
+#Создание таблицы users со столбцами id и name, параметр INT. 
+
+mysql> CREATE TABLE  users (id INT, name INT);
+Query OK, 0 rows affected (0.02 sec)
+
+#Проверка содержимого
+mysql> SHOW TABLES
+    -> ;
++-------------------+
+| Tables_in_example |
++-------------------+
+| users             |
++-------------------+
+1 row in set (0.00 sec)
+
+mysql> DESCRIBE users
+    -> ;
++-------+------+------+-----+---------+-------+
+| Field | Type | Null | Key | Default | Extra |
++-------+------+------+-----+---------+-------+
+| id    | int  | YES  |     | NULL    |       |
+| name  | int  | YES  |     | NULL    |       |
++-------+------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+3. Создайте дамп базы данных example из предыдущего задания, разверните содержимое дампа в новую базу данных sample.
+
+#Создание БД sample
+simon@simon-VirtualBox:~$ mysql
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 20
+Server version: 8.0.23-0ubuntu0.20.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2021, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> CREATE DATABASE sample
+    -> ;
+Query OK, 1 row affected (0.01 sec)
+
+#Дамп example
+
+simon@simon-VirtualBox:~$ mysqldump example > sample.sql
+simon@simon-VirtualBox:~$ ls -la
+итого 1244
+drwxr-xr-x 19 simon simon    4096 фев  9 16:17  .
+drwxr-xr-x  3 root  root     4096 фев  8 17:37  ..
+-rw-------  1 simon simon    1229 фев  9 15:30  .bash_history
+-rw-r--r--  1 simon simon     220 фев  8 17:37  .bash_logout
+-rw-r--r--  1 simon simon    3771 фев  8 17:37  .bashrc
+drwx------ 13 simon simon    4096 фев  8 18:28  .cache
+drwxr-xr-x 11 simon simon    4096 фев  8 19:07  .config
+drwxrwxr-x  4 simon simon    4096 фев  8 18:47  .eclipse
+drwx------  3 simon simon    4096 фев  8 18:46  .gnupg
+-rw-rw-r--  1 simon simon      20 фев  8 18:56  Helo.sql
+drwxr-xr-x  3 simon simon    4096 фев  8 17:43  .local
+drwx------  5 simon simon    4096 фев  8 18:15  .mozilla
+-rw-rw-r--  1 simon simon      40 фев  9 15:42  .my.cnf
+-rw-------  1 simon simon     400 фев  9 16:16  .mysql_history
+-rw-rw-r--  1 simon simon 1146290 фев  9 15:45  mysql.sql
+-rw-r--r--  1 simon simon     807 фев  8 17:37  .profile
+-rw-rw-r--  1 simon simon    1828 фев  9 16:17  sample.sql
+drwxr-xr-x  3 simon simon    4096 фев  8 18:19  snap
+drwx------  2 simon simon    4096 фев  8 18:46  .ssh
+
+#Возвращаемся в mysql
+
+simon@simon-VirtualBox:~$ mysql
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 22
+Server version: 8.0.23-0ubuntu0.20.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2021, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+#Проверяем наличие БД sample и таблицы в ней
+
+mysql> SHOW DATABASES;
++--------------------+
+| Database           |
++--------------------+
+| example            |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sample             |
+| shop               |
+| sys                |
++--------------------+
+7 rows in set (0.00 sec)
+mysql> DESCRIBE sample.users;
++-------+------+------+-----+---------+-------+
+| Field | Type | Null | Key | Default | Extra |
++-------+------+------+-----+---------+-------+
+| id    | int  | YES  |     | NULL    |       |
+| name  | int  | YES  |     | NULL    |       |
++-------+------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+4. (по желанию) Ознакомьтесь более подробно с документацией утилиты mysqldump. Создайте дамп единственной таблицы help_keyword базы данных mysql. Причем добейтесь того, чтобы дамп содержал только первые 100 строк таблицы.
+
+#Создание дампа с ограничением 100 строк при помщью опции --where.
+
+simon@simon-VirtualBox:~$ mysqldump --opt --where="1 limit 100" mysql help_keyword > 100_keyword.sql
+
+simon@simon-VirtualBox:~$ mysql
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 24
+Server version: 8.0.23-0ubuntu0.20.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2021, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> CREATE DATABASE 100_keyword
+    -> ;
+Query OK, 1 row affected (0.00 sec)
+
+#Возвращаемся и пытаемся развернуть.
+
+simon@simon-VirtualBox:~$ mysql 100_keyword < 100_keyword.sql
+ERROR 3723 (HY000) at line 25: The table 'help_keyword' may not be created in the reserved tablespace 'mysql'.
+#Ошибка из за резервации.
+
+
+
+
+
+
+
+
+
+
