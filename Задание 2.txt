@@ -1,0 +1,74 @@
+2. Используя сервис http://filldb.info или другой по вашему желанию, сгенерировать тестовые данные для всех таблиц, учитывая логику связей. Для всех таблиц, где это имеет смысл, создать не менее 100 строк. Загрузить тестовые данные в свою локальную базу данных ВК. Приложить к отчёту полученный дамп с данными.
+mysql> CREATE DATABASE IF NOT EXISTS vk;
+Query OK, 1 row affected, 1 warning (0.00 sec)
+mysql> SHOW DATABASES;
++--------------------+
+| Database           |
++--------------------+
+| 100_keyword        |
+| example            |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sample             |
+| shop               |
+| sys                |
+| vk                 |
++--------------------+
+9 rows in set (0.01 sec)
+mysql> exit
+Bye
+simon@simon-VirtualBox:~$ mysql vk < dump_vk.sql
+simon@simon-VirtualBox:~$ 
+simon@simon-VirtualBox:~$ mysql vk
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 14
+Server version: 8.0.23-0ubuntu0.20.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2021, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> SHOW TABLES;
++---------------------+
+| Tables_in_vk        |
++---------------------+
+| communites          |
+| communities         |
+| communities_users   |
+| friendship          |
+| friendship_statuses |
+| friendships         |
+| media               |
+| media_types         |
+| messages            |
+| profiles            |
+| users               |
++---------------------+
+11 rows in set (0.00 sec)
+mysql> SELECT * FROM users;
++-----+------------+-------------+---------------------------------+----------------------+---------------------+---------------------+
+| id  | first_name | last_name   | email                           | phone                | created_at          | updated_at          |
++-----+------------+-------------+---------------------------------+----------------------+---------------------+---------------------+
+|   1 | Kristina   | McKenzie    | macy03@example.com              | 1-111-757-4108x23984 | 2014-06-28 13:54:55 | 2015-04-04 17:37:49 |
+|   2 | Abel       | Brekke      | qmorissette@example.net         | 1-808-187-4200x56351 | 2020-04-24 20:36:38 | 2016-08-12 14:20:55 |
+|   3 | Serena     | Armstrong   | ocummerata@example.org          | 697.983.2451x9353    | 2011-05-02 04:21:18 | 2012-10-09 20:00:40 |
+|   4 | Hadley     | Kris        | eliane.deckow@example.org       | 07475795886          | 2015-06-10 23:19:00 | 2011-03-25 02:42:20 |
+|   5 | Rae        | Kshlerin    | aaliyah20@example.net           | 09837433579          | 2020-03-22 07:41:26 | 2019-02-17 17:48:10 |
+|   6 | Pearline   | Jaskolski   | kaitlyn.marquardt@example.com   | (493)966-5293x424    | 2013-11-05 16:26:22 | 2014-04-18 23:33:59 |
+|   7 | Kaya       | Schiller    | eveline.ryan@example.com        | 872-027-3191x41442   | 2018-07-25 16:07:42 | 2020-05-12 15:56:52 |
+|   8 | Matilda    | Runolfsson  | devon75@example.org             | (110)964-4260x552    | 2017-09-25 06:10:40 | 2016-12-05 05:42:34 |
+|   9 | Shanie     | Willms      | ariel70@example.com             | 1-409-999-6179x9868  | 2020-01-19 11:42:04 | 2019-05-17 08:29:18 |
+|  10 | Jalyn      | Stroman     | laura91@example.com             | (615)429-9450x6783   | 2011-05-29 06:22:53 | 2018-04-05 07:28:35 |
+|  11 | Percival   | Bednar      | oma.huel@example.net            | 05272698032          | 2014-07-27 22:53:30 | 2015-04-20 09:45:17 |
+|  12 | Presley    | Glover      | lindsey37@example.net           | 06340433544          | 2017-04-27 17:23:15 | 2013-03-06 16:16:03 |
+|  13 | Autumn     | Hegmann     | helen.carter@example.org        | 1-481-074-4824       | 2014-04-11 18:43:18 | 2011-12-31 13:14:56 |
+
+
