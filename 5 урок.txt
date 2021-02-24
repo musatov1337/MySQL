@@ -1,0 +1,240 @@
+Практическое задание по теме «Операторы, фильтрация, сортировка и ограничение»
+
+1. Пусть в таблице users поля created_at и updated_at оказались незаполненными. Заполните их текущими датой и временем.
+
+mysql> CREATE TABLE users(name VARCHAR(10), created_at DATETIME, updated_at DATETIME);
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> INSERT INTO users VALUES ('Sergey', NOW(), NOW());
+Query OK, 1 row affected (0.00 sec)
+
+mysql> SELECT * FROM users;
++--------+---------------------+---------------------+
+| name   | created_at          | updated_at          |
++--------+---------------------+---------------------+
+| Sergey | 2021-02-23 18:31:59 | 2021-02-23 18:31:59 |
++--------+---------------------+---------------------+
+1 row in set (0.00 sec)
+
+
+2. Таблица users была неудачно спроектирована. Записи created_at и updated_at были заданы типом VARCHAR и в них долгое время помещались значения в формате 20.10.2017 8:10. Необходимо преобразовать поля к типу DATETIME, сохранив введённые ранее значения.
+
+mysql> SHOW COLUMNS FROM users;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| name       | varchar(55) | YES  |     | NULL    |       |
+| created_at | varchar(55) | YES  |     | NULL    |       |
+| updated_at | varchar(55) | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+
+mysql> SELECT * FROM users;
++---------+------------+------------+
+| name    | created_at | updated_at |
++---------+------------+------------+
+| Andrew  | 2001.10.05 | 2002.08.03 |
+| Mikhail | 2005.12.03 | 2005.12.15 |
+| Sergey  | 2020.03.16 | 2020.04.12 |
+| Ivan    | 2021.01.12 | 2021.02.24 |
++---------+------------+------------+
+4 rows in set (0.00 sec)
+
+mysql> ALTER TABLE users MODIFY created_at DATETIME;
+Query OK, 4 rows affected (0.06 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> ALTER TABLE users MODIFY updated_at DATETIME;
+Query OK, 4 rows affected (0.04 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM users;
++---------+---------------------+---------------------+
+| name    | created_at          | updated_at          |
++---------+---------------------+---------------------+
+| Andrew  | 2001-10-05 00:00:00 | 2002-08-03 00:00:00 |
+| Mikhail | 2005-12-03 00:00:00 | 2005-12-15 00:00:00 |
+| Sergey  | 2020-03-16 00:00:00 | 2020-04-12 00:00:00 |
+| Ivan    | 2021-01-12 00:00:00 | 2021-02-24 00:00:00 |
++---------+---------------------+---------------------+
+4 rows in set (0.00 sec)
+
+mysql> SHOW COLUMNS FROM users;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| name       | varchar(55) | YES  |     | NULL    |       |
+| created_at | datetime    | YES  |     | NULL    |       |
+| updated_at | datetime    | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+3. В таблице складских запасов storehouses_products в поле value могут встречаться самые разные цифры: 0, если товар закончился и выше нуля, если на складе имеются запасы. Необходимо отсортировать записи таким образом, чтобы они выводились в порядке увеличения значения value. Однако нулевые запасы должны выводиться в конце, после всех 
+
+mysql> SELECT value FROM storehouses_products;
++-------+
+| value |
++-------+
+|     6 |
+|     9 |
+|     5 |
+|     0 |
+|     8 |
+|     9 |
+|     2 |
+|     9 |
+|     6 |
+|     8 |
++-------+
+10 rows in set (0.01 sec)
+
+mysql> SELECT value FROM storehouses_products ORDER BY IF (value = 0, 1, 0), value;
+
++-------+
+| value |
++-------+
+|     2 |
+|     5 |
+|     6 |
+|     6 |
+|     8 |
+|     8 |
+|     9 |
+|     9 |
+|     9 |
+|     0 |
++-------+
+10 rows in set (0.00 sec)
+
+
+4. (по желанию) Из таблицы users необходимо извлечь пользователей, родившихся в августе и мае. Месяцы заданы в виде списка английских названий (may, august)
+
+mysql> INSERT INTO users(name, birthday_at) VALUES
+    -> ('Mikhail', 'April'),
+    -> ('Anna', 'May'),
+    -> ('Serger', 'August'),
+    -> ('Helen', 'October');
+Query OK, 4 rows affected (0.00 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM users;
++---------+-------------+
+| name    | birthday_at |
++---------+-------------+
+| Mikhail | April       |
+| Anna    | May         |
+| Serger  | August      |
+| Helen   | October     |
++---------+-------------+
+4 rows in set (0.00 sec)
+
+mysql> SELECT * FROM users WHERE birthday_at = 'may';
++------+-------------+
+| name | birthday_at |
++------+-------------+
+| Anna | May         |
++------+-------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT * FROM users WHERE birthday_at = 'august';
++--------+-------------+
+| name   | birthday_at |
++--------+-------------+
+| Serger | August      |
++--------+-------------+
+1 row in set (0.00 sec)
+
+
+5. (по желанию) Из таблицы catalogs извлекаются записи при помощи запроса. SELECT * FROM catalogs WHERE id IN (5, 1, 2); Отсортируйте записи в порядке, заданном в списке IN.
+
+mysql> SELECT *  FROM catalogs;
++----+----------------------+
+| id | name                 |
++----+----------------------+
+|  1 | Процессоры           |
+|  2 | Мат.платы            |
+|  3 | Видеокарты           |
+|  4 | Аудиокарты           |
+|  5 | Носители             |
++----+----------------------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT *  FROM catalogs ORDER BY IF (id = 5,1,5), id;
++----+----------------------+
+| id | name                 |
++----+----------------------+
+|  5 | Носители             |
+|  1 | Процессоры           |
+|  2 | Мат.платы            |
+|  3 | Видеокарты           |
+|  4 | Аудиокарты           |
++----+----------------------+
+5 rows in set (0.00 sec)
+
+
+
+Практическое задание теме «Агрегация данных»
+
+1. Подсчитайте средний возраст пользователей в таблице users.
+
+mysql> SELECT * FROM users;
++--------------------+-------------+
+| name               | birthday_at |
++--------------------+-------------+
+| Мария              | 1994-03-08  |
+| Елена              | 1998-02-12  |
+| Александр          | 1978-01-12  |
+| Виктор             | 1968-07-22  |
+| Сергей             | 2001-11-17  |
++--------------------+-------------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT
+    -> name,
+    -> FLOOR((TO_DAYS(NOW()) - TO_DAYS(birthday_at)) / 365.25) AS age
+    -> FROM
+    -> users;
++--------------------+------+
+| name               | age  |
++--------------------+------+
+| Мария              |   26 |
+| Елена              |   23 |
+| Александр          |   43 |
+| Виктор             |   52 |
+| Сергей             |   19 |
++--------------------+------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT ROUND(AVG((TO_DAYS(NOW()) - TO_DAYS(birthday_at)) / 365.25), 0) AS avg_age FROM
+users;
++---------+
+| avg_age |
++---------+
+|      32 |
++---------+
+1 row in set (0.00 sec)
+
+2. Подсчитайте количество дней рождения, которые приходятся на каждый из дней недели. Следует учесть, что необходимы дни недели текущего года, а не года рождения.
+
+mysql> SELECT
+    -> DATE_FORMAT(DATE(CONCAT_WS('-', YEAR(NOW()), MONTH(birthday_at), DAY(birthday_at))), '%W') AS day,
+    -> COUNT(*) AS total
+    -> FROM
+    -> users
+    -> GROUP BY
+    -> day
+    -> ORDER BY
+    -> total DESC;
++-----------+-------+
+| day       | total |
++-----------+-------+
+| Thursday  |     2 |
+| Monday    |     1 |
+| Friday    |     1 |
+| Tuesday   |     1 |
+| Wednesday |     1 |
+| Sunday    |     1 |
++-----------+-------+
+6 rows in set (0.00 sec)
+
+3. (по желанию) Подсчитайте произведение чисел в столбце таблицы.
