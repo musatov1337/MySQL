@@ -1,0 +1,12 @@
+
+#Первый вариант
+SELECT
+CONCAT('Намбольшое значение', ' ', MAX(gender)) AS 'Наибольшее значение',
+	CONCAT('Кол-во лайков мужской половины', ' ', (SELECT COUNT(user_id)  FROM likes WHERE user_id IN (SELECT user_id FROM profiles WHERE gender ='m'))) AS 'Male',
+	CONCAT('Кол-во лайков женской половины', ' ',(SELECT COUNT(user_id)  FROM likes WHERE user_id IN (SELECT user_id FROM profiles WHERE gender ='w'))) AS 'Female'
+FROM profiles;
+
+#Второй вариант
+
+SELECT MAX(gender) AS 'Наибольшее кол-во лайков' FROM profiles WHERE user_id IN(SELECT COUNT(user_id) FROM likes);
+

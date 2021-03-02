@@ -1,0 +1,94 @@
+#DBeaver
+DROP TABLE IF EXISTS likes;
+CREATE TABLE likes (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  user_id INT UNSIGNED NOT NULL,
+  target_id INT UNSIGNED NOT NULL,
+  target_type_id INT UNSIGNED NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+DROP TABLE IF EXISTS target_types;
+CREATE TABLE target_types (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL UNIQUE,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+INSERT INTO target_types (name) VALUES 
+  ('messages'),
+  ('users'),
+  ('media'),
+  ('posts');
+ 
+ INSERT INTO likes 
+  SELECT 
+    id, 
+    FLOOR(1 + (RAND() * 100)), 
+    FLOOR(1 + (RAND() * 100)),
+    FLOOR(1 + (RAND() * 4)),
+    CURRENT_TIMESTAMP 
+  FROM messages;
+ 
+ SELECT * FROM likes LIMIT 10;
+
+DROP TABLE IF EXISTS posts;
+CREATE TABLE posts (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  user_id INT UNSIGNED NOT NULL,
+  community_id INT UNSIGNED,
+  head VARCHAR(255),
+  body TEXT NOT NULL,
+  media_id INT UNSIGNED,
+  is_public BOOLEAN DEFAULT TRUE,
+  is_archived BOOLEAN DEFAULT FALSE,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+
+#console
+mysql> USE vk;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> SHOW TABLES
+    -> ;
++--------------------+
+| Tables_in_vk       |
++--------------------+
+| communities        |
+| communities_users  |
+| friendships        |
+| friendships_status |
+| likes              |
+| media              |
+| media_types        |
+| messages           |
+| posts              |
+| profiles           |
+| target_types       |
+| users              |
++--------------------+
+12 rows in set (0.00 sec)
+
+mysql> SELECT * FROM posts LIMIT 10;
++----+---------+--------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------+-----------+-------------+---------------------+---------------------+
+| id | user_id | community_id | head                                                                                                                                                                                                    | body                                                                                                                                                                                                    | media_id | is_public | is_archived | created_at          | updated_at          |
++----+---------+--------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------+-----------+-------------+---------------------+---------------------+
+|  1 |       9 |           14 | They're dreadfully fond of beheading people here; the great wonder is, that there's any one left alive!' She was a large ring, with the time,' she said to herself, 'because of his Normans--" How are. | Lobster Quadrille, that she did not answer, so Alice went on again:-- 'I didn't know how to get into the sky. Twinkle, twinkle--"' Here the other was sitting on a bough of a feather flock.            |        3 |         0 |           0 | 2014-07-29 10:31:08 | 2012-01-31 15:56:15 |
+|  2 |       5 |            2 | Down, down, down. Would the fall was over. However, when they liked, so that it is!' 'Why should it?' muttered the Hatter. 'I deny it!' said the March Hare said to the law, And argued each case with. | Queen to play croquet.' Then they all stopped and looked at the house, and the small ones choked and had just begun to think to herself, rather sharply; 'I advise you to offer it,' said the Duchess:. |        2 |         0 |           1 | 2014-12-22 16:16:40 | 2012-03-31 01:58:31 |
+|  3 |      15 |            9 | Father William replied to his son, 'I feared it might not escape again, and went back for a long argument with the edge of the Lobster Quadrille, that she ought not to lie down upon her: she gave.    | Caterpillar sternly. 'Explain yourself!' 'I can't help it,' she thought, 'till its ears have come, or at least one of the bottle was NOT marked 'poison,' so Alice soon began talking to herself, for.  |        3 |         0 |           0 | 2018-07-24 22:45:36 | 2018-10-31 14:35:01 |
+|  4 |      13 |            6 | Alice. 'Stand up and rubbed its eyes: then it watched the Queen in a low, timid voice, 'If you didn't like cats.' 'Not like cats!' cried the Mouse, frowning, but very glad she had sat down and make.  | CHAPTER VIII. The Queen's Croquet-Ground A large rose-tree stood near the King sharply. 'Do you mean "purpose"?' said Alice. 'Why, you don't even know what a Gryphon is, look at the door--I do wish.  |        2 |         0 |           1 | 2019-02-02 06:19:03 | 2016-06-08 18:30:49 |
+|  5 |       5 |            4 | He says it kills all the same, the next witness would be only rustling in the house, and have next to her. 'I wish I hadn't quite finished my tea when I get it home?' when it saw mine coming!' 'How.  | Alice thought decidedly uncivil. 'But perhaps he can't help it,' she said to herself. 'Shy, they seem to put down her flamingo, and began singing in its hurry to change the subject of conversation..  |        3 |         0 |           1 | 2017-04-06 14:57:38 | 2019-06-15 01:42:38 |
+|  6 |       8 |           13 | They had a VERY good opportunity for repeating his remark, with variations. 'I shall do nothing of the treat. When the procession moved on, three of her childhood: and how she would catch a bad cold. | King. 'Nearly two miles high,' added the Dormouse. 'Don't talk nonsense,' said Alice to herself, rather sharply; 'I advise you to death."' 'You are old,' said the Mock Turtle in the prisoner's.       |        3 |         1 |           0 | 2011-06-02 09:57:23 | 2016-04-19 00:16:38 |
+|  7 |      15 |           19 | As soon as the door opened inwards, and Alice's first thought was that you weren't to talk about wasting IT. It's HIM.' 'I don't quite understand you,' she said, 'for her hair goes in such a puzzled. | Alice, who was passing at the top with its mouth again, and made another rush at the bottom of a globe of goldfish she had wept when she had somehow fallen into a pig, and she soon made out that she. |        1 |         1 |           1 | 2016-12-08 00:29:34 | 2020-03-23 21:44:13 |
+|  8 |      14 |           14 | However, when they arrived, with a sudden burst of tears, 'I do wish I had it written down: but I shall never get to the Dormouse, after thinking a minute or two sobs choked his voice. 'Same as if.   | Alice. 'Anything you like,' said the Caterpillar took the hookah out of the wood to listen. The Fish-Footman began by taking the little door, so she began fancying the sort of use in talking to.      |        3 |         1 |           0 | 2017-10-12 11:36:03 | 2015-04-08 07:36:47 |
+|  9 |      15 |            4 | I should like it very nice, (it had, in fact, a sort of present!' thought Alice. 'I'm glad they don't seem to come out among the people near the door, and the second verse of the teacups as the.      | Oh, my dear paws! Oh my dear paws! Oh my dear Dinah! I wonder if I shall have to beat time when I get SOMEWHERE,' Alice added as an unusually large saucepan flew close by it, and kept doubling.       |        3 |         0 |           0 | 2012-01-19 04:30:01 | 2016-07-07 13:58:47 |
+| 10 |       3 |           16 | I'm mad. You're mad.' 'How do you know that Cheshire cats always grinned; in fact, I didn't know that cats COULD grin.' 'They all can,' said the Mock Turtle, 'Drive on, old fellow! Don't be all day.  | Mock Turtle recovered his voice, and, with tears running down his brush, and had to double themselves up and leave the court; but on second thoughts she decided to remain where she was to eat her up. |        3 |         1 |           1 | 2016-05-05 10:29:15 | 2011-03-10 09:25:54 |
++----+---------+--------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+----------+-----------+-------------+---------------------+---------------------+
+10 rows in set (0.00 sec)
+
+
+
