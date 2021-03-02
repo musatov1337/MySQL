@@ -1,0 +1,9 @@
+4. Подсчитать количество лайков которые получили 10 самых молодых пользователей. 
+
+SELECT
+	(SELECT birthday_at FROM profiles WHERE user_id = id) AS Age,
+	(SELECT first_name FROM users WHERE id = user_id) AS Name,
+	(SELECT COUNT(*) FROM likes l2 WHERE l2.target_id = l1.target_id) AS Likes
+FROM likes l1
+ORDER BY IF (Age = 0, 0, 1), Age DESC
+LIMIT 10;
