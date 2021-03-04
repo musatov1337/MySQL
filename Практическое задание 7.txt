@@ -1,0 +1,61 @@
+
+1. Составьте список пользователей users, которые осуществили хотя бы один заказ orders в интернет магазине.
+
+SELECT DISTINCT 
+	(SELECT name FROM users WHERE id = user_id) AS 'Имя',
+	(SELECT COUNT(*) FROM orders o2 WHERE o2.user_id = o3.user_id) AS 'Кол-во заказов'
+FROM orders o3;
+
+2. Выведите список товаров products и разделов catalogs, который соответствует товару
+
+SELECT name AS 'Наименование товара',
+	(SELECT name FROM catalogs WHERE id = catalog_id) AS 'Каталог'
+FROM products;
+
+Более реальный вариант.
+
+SELECT 
+	(SELECT name FROM catalogs WHERE id = catalog_id) AS 'Каталог',
+	name AS 'Наименование товара',
+	desription AS 'Описание товара',
+	price AS 'Цена'
+FROM products;
+
+3.  (по желанию) Пусть имеется таблица рейсов flights (id, from, to) и таблица городов cities (label, name). Поля from, to и label содержат английские названия городов, поле name — русское. Выведите список рейсов flights с русскими названиями городов.
+
+CREATE DATABASE aero;
+USE aero;
+
+CREATE TABLE cities(
+	labels VARCHAR(55),
+	name VARCHAR(55));
+
+CREATE TABLE flights(
+	id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	from_city VARCHAR(55),
+	to_city VARCHAR(55));
+	
+INSERT INTO flights (from_city, to_city)
+VALUES 
+	('Moscow', 'Volgograd'),
+	('Krasnodar', 'Rostov'),
+	('Samara', 'Sochi');
+	
+INSERT INTO cities (labels, name)
+VALUES 
+	('Moscow', 'Москва'),
+	('Krasnodar', 'Краснодар'),
+	('Samara', 'Самара'),
+	('Volgograd', 'Волгоград'),
+	('Rostov', 'Ростов'),
+	('Sochi', 'Сочи');
+	
+SELECT * FROM flights;
+SELECT * FROM cities;
+
+SELECT 
+	(SELECT name FROM cities WHERE labels = from_city) AS 'Откуда',
+	(SELECT name FROM cities WHERE labels = to_city) AS 'Куда'
+FROM flights;
+
+
