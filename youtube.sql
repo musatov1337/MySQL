@@ -1,0 +1,121 @@
+DROP TABLE IF EXISTS users;
+
+CREATE TABLE users (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  username VARCHAR(55) NOT NULL UNIQUE,
+  mail VARCHAR(55) NOT NULL UNIQUE,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP(),
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP()
+) ENGINE=InnoDB  COMMENT='Таблица пользователей';
+
+DROP TABLE IF EXISTS profiles_channels;
+
+CREATE TABLE profiles_channels (
+  user_id INT UNSIGNED NOT NULL,
+  content_id INT UNSIGNED NOT NULL,
+  playlist_id INT UNSIGNED NOT NULL,
+ created_at DATETIME DEFAULT CURRENT_TIMESTAMP(),
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP()
+) ENGINE=InnoDB COMMENT='Таблица профилей';
+
+DROP TABLE IF EXISTS comments;
+
+CREATE TABLE comments (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY PRIMARY KEY,
+  from_user_id INT UNSIGNED NOT NULL,
+  to_content_video_id INT UNSIGNED NOT NULL,
+  body TEXT NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP()
+) ENGINE=InnoDB COMMENT='Таблица комментариев';
+
+DROP TABLE IF EXISTS contents;
+
+CREATE TABLE contents (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  user_id INT UNSIGEND NOT NULL,
+  content_video_id INT UNSIGNED NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP(),
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP()
+) ENGINE=InnoDB COMMENT='Таблица контента(все видео)';
+
+DROP TABLE IF EXISTS contents_videos;
+
+CREATE TABLE contents_videos (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY PRIMARY KEY,
+  user_id INT UNSIGNED NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  size INT NOT NULL,
+  metadata JSON,
+  playlist_id INT UNSIGNED NOT NULL,
+  navigation_id INT UNSIGNED NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP(),
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP()
+) ENGINE=InnoDB COMMENT='Таблица видео из которых состоит таблица контента';
+
+DROP TABLE IF EXISTS likes;
+
+CREATE TABLE likes (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY PRIMARY KEY,
+  from_user_id INT UNSIGNED NOT NULL,
+  to_content_video_id INT UNSIGNED NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP()
+) ENGINE=InnoDB COMMENT='Таблица лайков';
+
+
+DROP TABLE IF EXISTS navigations;
+
+CREATE TABLE navigations (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY PRIMARY KEY,
+  name VARCHAR(255) NOT NULL
+) ENGINE=InnoDB COMMENT='Раздел навигации сайта';
+
+INSERT INTO navigations (name) VALUES ('В тренде'),
+('Музыка'),
+('Видеоигры'),
+('Фильмы'),
+('Спорт');
+
+
+DROP TABLE IF EXISTS playlists;
+
+CREATE TABLE playlists (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP()
+) ENGINE=InnoDB COMMENT='Раздел навигации сайта';
+
+INSERT INTO playlists (name, updated_at) VALUES ('Плейлист 1', NOW()),
+	('Плейлист 2', NOW()),
+	('Плейлист 3', NOW()),
+	('Плейлист 4', NOW()),
+	('Плейлист 5', NOW()),
+	('Плейлист 6', NOW()),
+	('Плейлист 7', NOW()),
+	('Плейлист 8', NOW()),
+	('Плейлист 9', NOW());
+
+
+DROP TABLE IF EXISTS subscribers;
+
+CREATE TABLE subscribers(
+  user_id INT UNSIGNED NOT NULL,
+  to_subscribe_id INT UNSIGNED NOT NULL,,
+  subscribe_status_id INT UNSIGNED NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP(),
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP(),
+  PRIMARY KEY (user_id, to_subscribed_id)
+) ENGINE=InnoDB COMMENT='Таблица подписчиков';
+
+
+DROP TABLE IF EXISTS subscribers_status;
+
+CREATE TABLE subscribers_status (
+  id INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  confirmed_sub BOOLEAN NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP(),
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP(),
+) ENGINE=InnoDB COMMENT='Таблица статуса подписчиков';
+
+
+
+
